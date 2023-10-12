@@ -80,6 +80,21 @@ ruleTester.run("extensions", rule, {
       name: "standard relative import, defafult options",
     },
     {
+      code: "import { stuff } from '../react';",
+      errors: [
+        {
+          type: AST_NODE_TYPES.ImportDeclaration,
+          messageId: "enforce-no-missing-extensions",
+          data: {
+            file: "../react",
+          },
+        },
+      ],
+      output: "import { stuff } from '../react.js';",
+      filename: "file.ts",
+      name: "relative import up a directory, defafult options",
+    },
+    {
       code: "import { stuff } from '/opt/react';",
       errors: [
         {

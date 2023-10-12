@@ -31,7 +31,7 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
     }
     if (importLocationPrefixes.length === 0) {
       // set default prefix
-      importLocationPrefixes.push("./");
+      importLocationPrefixes.push(".");
     }
 
     function handler<
@@ -93,5 +93,5 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
       },
     ],
   },
-  defaultOptions: [{ prefixes: ["./"] }],
+  defaultOptions: [{ prefixes: ["."] }],
 });
