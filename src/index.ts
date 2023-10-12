@@ -4,7 +4,7 @@ import { recommended } from "./configs/recommended";
 import type { ExtensionsConfig } from "./configs/types";
 
 export const rules = {
-  "enforce-extensions": rule,
+  "extensions": rule,
 } satisfies Record<string, TSESLint.RuleModule<string, Array<unknown>>>;
 
 export const configs = {
