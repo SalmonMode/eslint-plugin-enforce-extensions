@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-enforce-extensions",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A simple eslint plugin that enforces imports and exports for file locations have a file extension.",
   "main": "dist/index.js",
   "module": "dist/index.js",
