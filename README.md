@@ -11,7 +11,7 @@ TypeScript [doesn't transform extensions](https://github.com/microsoft/TypeScrip
 
 This plugin can not only identify those problematic imports, but also automatically fix them if configured to do so.
 
-Other plugins exist for this, but it seemed that they only accounted for relative imports stating with `./`. This is a problem if you have special import scenarios, for example, importing from a lambda layer in an AWS Lambda function, where the import is an absolute file location starting with `/opt/`. 
+Other plugins exist for this, but it seemed that they only accounted for relative imports stating with `./`. This is a problem if you have special import scenarios, for example, importing from a lambda layer in an AWS Lambda function, where the import is an absolute file location starting with `/opt/`.
 
 This pluginallows you to specify exactly what import prefixes to look out for.
 
@@ -28,7 +28,10 @@ npm install --save-dev eslint-plugin-enforce-extensions
     ],
     "plugins": [
         "enforce-extensions"
-    ]
+    ],
+    "rules": {
+        "enforce-extensions/extensions": ["error", {"extraPrefixes": ["/opt/"]}
+    }
 }
 ```
 
