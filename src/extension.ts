@@ -3,7 +3,7 @@ import type {
   RuleContext,
   RuleFixer,
 } from "@typescript-eslint/utils/ts-eslint";
-import { isNull } from "primitive-predicates";
+import { isBoolean, isNull } from "primitive-predicates";
 
 const createRule = ESLintUtils.RuleCreator(
   () => `https://github.com/microsoft/TypeScript/issues/16577`
@@ -12,6 +12,7 @@ const createRule = ESLintUtils.RuleCreator(
 export type Options = [
   {
     prefixes?: string[];
+    includeDefault?: boolean;
   }
 ];
 
@@ -21,16 +22,22 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
     context: Readonly<RuleContext<"enforce-no-missing-extensions", Options>>
   ) {
     const options = context.options;
+    let defaultWasIncluded = false;
+    let includeDefault = true;
     const importLocationPrefixes: string[] = [];
     for (const option of options) {
       if (option.prefixes) {
         for (const prefix of option.prefixes) {
           importLocationPrefixes.push(prefix);
+          defaultWasIncluded = defaultWasIncluded || prefix === ".";
         }
       }
+      if (isBoolean(option.includeDefault)) {
+        includeDefault = includeDefault && option.includeDefault;
+      }
     }
-    if (importLocationPrefixes.length === 0) {
-      // set default prefix
+    if (!defaultWasIncluded && includeDefault) {
+      // make sure default prefix is included
       importLocationPrefixes.push(".");
     }
 
@@ -88,10 +95,11 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
         type: "object",
         properties: {
           prefixes: { type: "array" },
+          includeDefault: { type: "boolean" },
         },
         additionalProperties: false,
       },
     ],
   },
-  defaultOptions: [{ prefixes: ["."] }],
+  defaultOptions: [{ prefixes: ["."], includeDefault: true }],
 });

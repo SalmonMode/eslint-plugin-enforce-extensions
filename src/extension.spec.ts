@@ -1,7 +1,6 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import * as mocha from "mocha";
-import { recommended } from "./configs/recommended";
 import { rule } from "./extension";
 
 RuleTester.afterAll = mocha.after;
@@ -19,12 +18,6 @@ ruleTester.run("extensions", rule, {
       filename: "file.ts",
       code: "import { stuff } from './file.js';",
       name: "relative import, default options",
-    },
-    {
-      filename: "file.ts",
-      code: "import { stuff } from './file.js';",
-      options: [recommended.rules.extensions[1]],
-      name: "relative import, recommended options",
     },
     {
       filename: "file.ts",
@@ -46,24 +39,18 @@ ruleTester.run("extensions", rule, {
       code: "export const someVariable = `\nhello\n`;",
       name: "null source, default options",
     },
-  ],
-  invalid: [
     {
-      code: "import { stuff } from './react';",
-      errors: [
+      filename: "file.ts",
+      code: "import { stuff } from './file';",
+      options: [
         {
-          type: AST_NODE_TYPES.ImportDeclaration,
-          messageId: "enforce-no-missing-extensions",
-          data: {
-            file: "./react",
-          },
+          includeDefault: false,
         },
       ],
-      options: [recommended.rules.extensions[1]],
-      output: "import { stuff } from './react.js';",
-      filename: "file.ts",
-      name: "standard relative import, recommended options",
+      name: "relative import, do not include default prefix",
     },
+  ],
+  invalid: [
     {
       code: "import { stuff } from './react';",
       errors: [
@@ -133,6 +120,27 @@ ruleTester.run("extensions", rule, {
         },
       ],
       name: "standard absolute import with double quotes, absolute prefix option",
+    },
+    {
+      code: `import { stuff } from "/opt/react";\nimport { stuff } from "./react";`,
+      errors: [
+        {
+          type: AST_NODE_TYPES.ImportDeclaration,
+          messageId: "enforce-no-missing-extensions",
+          data: {
+            file: "/opt/react",
+          },
+        },
+      ],
+      output: `import { stuff } from "/opt/react.js";\nimport { stuff } from "./react";`,
+      filename: "file.ts",
+      options: [
+        {
+          includeDefault: false,
+          prefixes: ["/opt/"],
+        },
+      ],
+      name: "standard absolute import with double quotes, absolute prefix option, do no include default",
     },
   ],
 });

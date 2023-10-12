@@ -23,9 +23,6 @@ npm install --save-dev eslint-plugin-enforce-extensions
 1. Edit `.eslintrc`
 ```json
 {
-    "extends": [
-        "plugin:enforce-extensions/recommended"
-    ],
     "plugins": [
         "enforce-extensions"
     ],
@@ -65,4 +62,17 @@ eslint --fix .
 import Target from './target.js';
 import HigherTarget from '../higherTarget.js';
 import OtherTarget from '/opt/other.js';
+```
+
+If, for whatever reason, you wish to exclude the default `.` prefix, you can provide the following option:
+
+```json
+{
+    "plugins": [
+        "enforce-extensions"
+    ],
+    "rules": {
+        "enforce-extensions/extensions": ["error", {"includeDefault": false}
+    }
+}
 ```
