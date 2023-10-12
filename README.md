@@ -43,17 +43,17 @@ import Target from './target';
 import Target from '/opt/other';
 ```
 
-4. Lint
+2. Lint
 
 ```shell
 eslint .
 ```
 ```
 source.js
-  1:1  error  Location-based imports and exports must end with .js  enforce-extensions/enforce-extensions
+  1:1  error  Location-based imports and exports must end with .js  enforce-extensions/extensions
 ```
 
-5. Fix
+3. Fix
 
 ```shell
 eslint --fix .
