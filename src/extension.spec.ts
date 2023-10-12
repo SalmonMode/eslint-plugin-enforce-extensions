@@ -1,8 +1,8 @@
 import { RuleTester } from "@typescript-eslint/rule-tester";
-import { rule } from "./extension";
-import * as mocha from "mocha";
 import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import * as mocha from "mocha";
 import { recommended } from "./configs/recommended";
+import { rule } from "./extension";
 
 RuleTester.afterAll = mocha.after;
 RuleTester.it = mocha.it;
@@ -18,18 +18,13 @@ ruleTester.run("extensions", rule, {
     {
       filename: "file.ts",
       code: "import { stuff } from './file.js';",
-      options: [
-        recommended.rules.extensions[1]
-      ],
-      name: "relative import, default options"
+      name: "relative import, default options",
     },
     {
       filename: "file.ts",
       code: "import { stuff } from './file.js';",
-      options: [
-        recommended.rules.extensions[1]
-      ],
-      name: "relative import, recommended options"
+      options: [recommended.rules.extensions[1]],
+      name: "relative import, recommended options",
     },
     {
       filename: "file.ts",
@@ -39,12 +34,17 @@ ruleTester.run("extensions", rule, {
           prefixes: ["/opt/"],
         },
       ],
-      name: "absolute import, absolute prefix option"
+      name: "absolute import, absolute prefix option",
     },
     {
       filename: "file.ts",
       code: "import { stuff } from '/opt/file';",
-      name: "absolute import, default options"
+      name: "absolute import, default options",
+    },
+    {
+      filename: "file.ts",
+      code: "export const someVariable = `\nhello\n`;",
+      name: "null source, default options",
     },
   ],
   invalid: [
@@ -55,16 +55,14 @@ ruleTester.run("extensions", rule, {
           type: AST_NODE_TYPES.ImportDeclaration,
           messageId: "enforce-no-missing-extensions",
           data: {
-            file: './react',
+            file: "./react",
           },
-        }
+        },
       ],
-      options: [
-        recommended.rules.extensions[1]
-      ],
+      options: [recommended.rules.extensions[1]],
       output: "import { stuff } from './react.js';",
       filename: "file.ts",
-      name: "standard relative import, recommended options"
+      name: "standard relative import, recommended options",
     },
     {
       code: "import { stuff } from './react';",
@@ -73,13 +71,13 @@ ruleTester.run("extensions", rule, {
           type: AST_NODE_TYPES.ImportDeclaration,
           messageId: "enforce-no-missing-extensions",
           data: {
-            file: './react',
+            file: "./react",
           },
-        }
+        },
       ],
       output: "import { stuff } from './react.js';",
       filename: "file.ts",
-      name: "standard relative import, defafult options"
+      name: "standard relative import, defafult options",
     },
     {
       code: "import { stuff } from '/opt/react';",
@@ -88,9 +86,9 @@ ruleTester.run("extensions", rule, {
           type: AST_NODE_TYPES.ImportDeclaration,
           messageId: "enforce-no-missing-extensions",
           data: {
-            file: '/opt/react',
+            file: "/opt/react",
           },
-        }
+        },
       ],
       output: "import { stuff } from '/opt/react.js';",
       filename: "file.ts",
@@ -99,7 +97,7 @@ ruleTester.run("extensions", rule, {
           prefixes: ["/opt/"],
         },
       ],
-      name: "standard absolute import, absolute options"
+      name: "standard absolute import, absolute options",
     },
     {
       code: `import { stuff } from "/opt/react";`,
@@ -108,9 +106,9 @@ ruleTester.run("extensions", rule, {
           type: AST_NODE_TYPES.ImportDeclaration,
           messageId: "enforce-no-missing-extensions",
           data: {
-            file: '/opt/react',
+            file: "/opt/react",
           },
-        }
+        },
       ],
       output: `import { stuff } from "/opt/react.js";`,
       filename: "file.ts",
@@ -119,8 +117,7 @@ ruleTester.run("extensions", rule, {
           prefixes: ["/opt/"],
         },
       ],
-      name: "standard absolute import with double quotes, absolute prefix option"
+      name: "standard absolute import with double quotes, absolute prefix option",
     },
   ],
-
 });

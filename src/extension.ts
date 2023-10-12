@@ -3,7 +3,7 @@ import type {
   RuleContext,
   RuleFixer,
 } from "@typescript-eslint/utils/ts-eslint";
-import { assertIsObject } from "primitive-predicates";
+import { isNull } from "primitive-predicates";
 
 const createRule = ESLintUtils.RuleCreator(
   () => `https://github.com/microsoft/TypeScript/issues/16577`
@@ -41,7 +41,9 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
         | TSESTree.ExportAllDeclaration
     >(node: T): void {
       const source = node.source;
-      assertIsObject(source);
+      if (isNull(source)) {
+        return;
+      }
       const value = source.value.replace(/\?.*$/, "");
       if (
         !value ||
@@ -91,5 +93,5 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
       },
     ],
   },
-  defaultOptions: [{ prefixes: ["./"]}],
+  defaultOptions: [{ prefixes: ["./"] }],
 });
