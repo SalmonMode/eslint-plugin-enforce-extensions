@@ -16,9 +16,9 @@ type Options = [
 ];
 
 // Type: RuleModule<"uppercase", ...>
-export const rule = createRule<Options, "enforce-extensions/extension">({
+export const rule = createRule<Options, "enforce-no-missing-extensions">({
   create(
-    context: Readonly<RuleContext<"enforce-extensions/extension", Options>>
+    context: Readonly<RuleContext<"enforce-no-missing-extensions", Options>>
   ) {
     const options = context.options;
     const importLocationPrefixes = ["./"];
@@ -46,7 +46,7 @@ export const rule = createRule<Options, "enforce-extensions/extension">({
       )
         return;
       context.report({
-        messageId: "enforce-extensions/extension",
+        messageId: "enforce-no-missing-extensions",
         node,
         data: {
           file: source.value,
@@ -66,14 +66,14 @@ export const rule = createRule<Options, "enforce-extensions/extension">({
       ImportDeclaration: handler<TSESTree.ImportDeclaration>,
     };
   },
-  name: "enforce-extensions",
+  name: "extensions",
   meta: {
     fixable: "code",
     docs: {
       description: "File location imports and exports must end with .js.",
     },
     messages: {
-      "enforce-extensions/extension":
+      "enforce-no-missing-extensions":
         "Import from '{{ file }}' is missing a file extension. File location imports and exports must end with .js",
     },
     type: "problem",

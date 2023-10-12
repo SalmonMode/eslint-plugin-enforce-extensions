@@ -12,7 +12,7 @@ const ruleTester = new RuleTester({
   parser: '@typescript-eslint/parser',
 });
 
-ruleTester.run('enforce-extensions', rule, {
+ruleTester.run('extensions', rule, {
   valid: [
     {
       filename: "file.ts",
@@ -41,7 +41,7 @@ ruleTester.run('enforce-extensions', rule, {
       errors: [
         {
           type: AST_NODE_TYPES.ImportDeclaration,
-          messageId: "enforce-extensions/extension",
+          messageId: "enforce-no-missing-extensions",
           data: {
             file: './react',
           },
@@ -56,7 +56,7 @@ ruleTester.run('enforce-extensions', rule, {
       errors: [
         {
           type: AST_NODE_TYPES.ImportDeclaration,
-          messageId: "enforce-extensions/extension",
+          messageId: "enforce-no-missing-extensions",
           data: {
             file: '/opt/react',
           },
@@ -76,7 +76,7 @@ ruleTester.run('enforce-extensions', rule, {
       errors: [
         {
           type: AST_NODE_TYPES.ImportDeclaration,
-          messageId: "enforce-extensions/extension",
+          messageId: "enforce-no-missing-extensions",
           data: {
             file: '/opt/react',
           },
