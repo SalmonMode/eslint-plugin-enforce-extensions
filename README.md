@@ -5,13 +5,15 @@
 [![Package status](https://img.shields.io/npm/v/eslint-plugin-enforce-extensions.svg)](https://www.npmjs.com/package/eslint-plugin-enforce-extensions)
 [![License](https://img.shields.io/npm/l/eslint-plugin-enforce-extensions.svg)](https://opensource.org/licenses/MIT)
 
-Enforce imports and exports for file locations have a file extension
+A simple eslint plugin that enforces imports and exports for file locations have a '.js' file extension.
 
-TypeScript [doesn't transform extensions](https://github.com/microsoft/TypeScript/issues/16577) and [doesn't enforce file extensions](https://github.com/microsoft/TypeScript/issues/42813).
+TypeScript [doesn't transform extensions](https://github.com/microsoft/TypeScript/issues/16577) and [doesn't enforce file extensions](https://github.com/microsoft/TypeScript/issues/42813). This can be a problem when the `type` specified in the `package.json` is `module`, as the compiler will not complain about the lack of an extension, because an error will get thrown during runtime saying that it can't find that module.
 
-This is a simple eslint plugin that ensures that imports _and_ exports for file locations have `.js` extensions.
+This plugin can not only identify those problematic imports, but also automatically fix them if configured to do so.
 
-Credit for [the original implementation](https://github.com/solana-labs/wallet-adapter/pull/547) goes to [johnrees](https://github.com/johnrees). ❤️
+Other plugins exist for this, but it seemed that they only accounted for relative imports stating with `./`. This is a problem if you have special import scenarios, for example, importing from a lambda layer in an AWS Lambda function, where the import is an absolute file location starting with `/opt/`. 
+
+This pluginallows you to specify exactly what import prefixes to look out for.
 
 1. Install
 ```shell
