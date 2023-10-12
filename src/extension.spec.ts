@@ -1,7 +1,8 @@
-import { RuleTester } from '@typescript-eslint/rule-tester';
+import { RuleTester } from "@typescript-eslint/rule-tester";
 import { rule } from "./extension";
-import * as mocha from 'mocha';
-import { AST_NODE_TYPES } from '@typescript-eslint/utils';
+import * as mocha from "mocha";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import { recommended } from "./configs/recommended";
 
 RuleTester.afterAll = mocha.after;
 RuleTester.it = mocha.it;
@@ -9,30 +10,41 @@ RuleTester.itOnly = mocha.it.only;
 RuleTester.describe = mocha.describe;
 
 const ruleTester = new RuleTester({
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
 });
 
-ruleTester.run('extensions', rule, {
+ruleTester.run("extensions", rule, {
   valid: [
     {
       filename: "file.ts",
       code: "import { stuff } from './file.js';",
-      name: "relative import"
+      options: [
+        recommended.rules.extensions[1]
+      ],
+      name: "relative import, default options"
+    },
+    {
+      filename: "file.ts",
+      code: "import { stuff } from './file.js';",
+      options: [
+        recommended.rules.extensions[1]
+      ],
+      name: "relative import, recommended options"
     },
     {
       filename: "file.ts",
       code: "import { stuff } from '/opt/file.js';",
       options: [
         {
-          extraPrefixes: ["/opt/"],
+          prefixes: ["/opt/"],
         },
       ],
-      name: "absolute import"
+      name: "absolute import, absolute prefix option"
     },
     {
       filename: "file.ts",
       code: "import { stuff } from '/opt/file';",
-      name: "absolute import without option to catch it"
+      name: "absolute import, default options"
     },
   ],
   invalid: [
@@ -47,9 +59,27 @@ ruleTester.run('extensions', rule, {
           },
         }
       ],
+      options: [
+        recommended.rules.extensions[1]
+      ],
       output: "import { stuff } from './react.js';",
       filename: "file.ts",
-      name: "standard relative import"
+      name: "standard relative import, recommended options"
+    },
+    {
+      code: "import { stuff } from './react';",
+      errors: [
+        {
+          type: AST_NODE_TYPES.ImportDeclaration,
+          messageId: "enforce-no-missing-extensions",
+          data: {
+            file: './react',
+          },
+        }
+      ],
+      output: "import { stuff } from './react.js';",
+      filename: "file.ts",
+      name: "standard relative import, defafult options"
     },
     {
       code: "import { stuff } from '/opt/react';",
@@ -66,10 +96,10 @@ ruleTester.run('extensions', rule, {
       filename: "file.ts",
       options: [
         {
-          extraPrefixes: ["/opt/"],
+          prefixes: ["/opt/"],
         },
       ],
-      name: "standard absolute import"
+      name: "standard absolute import, absolute options"
     },
     {
       code: `import { stuff } from "/opt/react";`,
@@ -86,10 +116,10 @@ ruleTester.run('extensions', rule, {
       filename: "file.ts",
       options: [
         {
-          extraPrefixes: ["/opt/"],
+          prefixes: ["/opt/"],
         },
       ],
-      name: "standard absolute import with double quotes"
+      name: "standard absolute import with double quotes, absolute prefix option"
     },
   ],
 

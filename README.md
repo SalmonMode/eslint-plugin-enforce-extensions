@@ -30,7 +30,7 @@ npm install --save-dev eslint-plugin-enforce-extensions
         "enforce-extensions"
     ],
     "rules": {
-        "enforce-extensions/extensions": ["error", {"extraPrefixes": ["/opt/"]}
+        "enforce-extensions/extensions": ["error", {"prefixes": ["/opt/"]}
     }
 }
 ```

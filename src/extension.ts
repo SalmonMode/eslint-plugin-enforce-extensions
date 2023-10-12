@@ -9,9 +9,9 @@ const createRule = ESLintUtils.RuleCreator(
   () => `https://github.com/microsoft/TypeScript/issues/16577`
 );
 
-type Options = [
+export type Options = [
   {
-    extraPrefixes?: string[];
+    prefixes?: string[];
   }
 ];
 
@@ -21,13 +21,17 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
     context: Readonly<RuleContext<"enforce-no-missing-extensions", Options>>
   ) {
     const options = context.options;
-    const importLocationPrefixes = ["./"];
+    const importLocationPrefixes: string[] = [];
     for (const option of options) {
-      if (option.extraPrefixes) {
-        for (const prefix of option.extraPrefixes) {
+      if (option.prefixes) {
+        for (const prefix of option.prefixes) {
           importLocationPrefixes.push(prefix);
         }
       }
+    }
+    if (importLocationPrefixes.length === 0) {
+      // set default prefix
+      importLocationPrefixes.push("./");
     }
 
     function handler<
@@ -81,11 +85,11 @@ export const rule = createRule<Options, "enforce-no-missing-extensions">({
       {
         type: "object",
         properties: {
-          extraPrefixes: { type: "array" },
+          prefixes: { type: "array" },
         },
         additionalProperties: false,
       },
     ],
   },
-  defaultOptions: [{}],
+  defaultOptions: [{ prefixes: ["./"]}],
 });
